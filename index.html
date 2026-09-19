@@ -1,0 +1,1594 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Funnelschmiede</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --paper: #f7f4ee;
+    --paper-raised: #ffffff;
+    --ink: #1c232b;
+    --ink-soft: #5b6472;
+    --ink-faint: #93998f;
+    --line: #ddd6c7;
+    --line-strong: #c9c0ac;
+    --brass: #b56a2c;
+    --brass-strong: #8f4f1c;
+    --brass-tint: #f0dfc9;
+    --stage-1: #a9c3bc;
+    --stage-2: #74a29b;
+    --stage-3: #457872;
+    --stage-4: #234e4a;
+    --shadow: 0 1px 2px rgba(28,35,43,.05), 0 14px 30px -18px rgba(28,35,43,.28);
+    --danger: #a1402f;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14181a;
+      --paper-raised: #1c2124;
+      --ink: #ece8df;
+      --ink-soft: #a9afaa;
+      --ink-faint: #6c726c;
+      --line: #2c3134;
+      --line-strong: #3c4246;
+      --brass: #e0975a;
+      --brass-strong: #f0b784;
+      --brass-tint: #3a2d1f;
+      --stage-1: #587a75;
+      --stage-2: #3f6f69;
+      --stage-3: #2c5551;
+      --stage-4: #183735;
+      --shadow: 0 1px 2px rgba(0,0,0,.5), 0 16px 34px -18px rgba(0,0,0,.6);
+      --danger: #d9705d;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14181a;
+    --paper-raised: #1c2124;
+    --ink: #ece8df;
+    --ink-soft: #a9afaa;
+    --ink-faint: #6c726c;
+    --line: #2c3134;
+    --line-strong: #3c4246;
+    --brass: #e0975a;
+    --brass-strong: #f0b784;
+    --brass-tint: #3a2d1f;
+    --stage-1: #587a75;
+    --stage-2: #3f6f69;
+    --stage-3: #2c5551;
+    --stage-4: #183735;
+    --shadow: 0 1px 2px rgba(0,0,0,.5), 0 16px 34px -18px rgba(0,0,0,.6);
+    --danger: #d9705d;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Work Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; text-wrap: balance; margin: 0; }
+  .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  .app {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 28px 20px 64px;
+  }
+  .app.is-result { max-width: 880px; }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 36px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-mark {
+    width: 34px; height: 34px;
+    display: grid; place-items: center;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 8px;
+    color: var(--brass);
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: -0.02em;
+    background: var(--paper-raised);
+  }
+  .brand-name {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .restart-link {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px 0;
+  }
+  .restart-link:hover { color: var(--brass); }
+
+  [hidden] { display: none !important; }
+
+  /* ---- intro ---- */
+  .intro-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin-bottom: 14px;
+    display: block;
+  }
+  .intro h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.12; font-weight: 600; }
+  .intro p.lede {
+    margin: 18px 0 0;
+    color: var(--ink-soft);
+    font-size: 16.5px;
+    line-height: 1.6;
+    max-width: 56ch;
+  }
+  .intro-steps {
+    margin: 30px 0 32px;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 14px;
+  }
+  .intro-steps li {
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+  }
+  .intro-steps .num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--brass);
+    min-width: 20px;
+  }
+  .intro-steps strong { color: var(--ink); font-weight: 600; }
+  .btn-primary {
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: #fff;
+    background: var(--brass-strong);
+    border: none;
+    border-radius: 8px;
+    padding: 13px 22px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+  }
+  .btn-primary:hover { background: var(--brass); }
+  .btn-primary:disabled { opacity: .45; cursor: not-allowed; }
+  .btn-ghost {
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 500;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    background: transparent;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 8px;
+    padding: 11.5px 18px;
+    cursor: pointer;
+  }
+  .btn-ghost:hover { border-color: var(--brass); color: var(--brass); }
+  .privacy-note {
+    margin-top: 26px;
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    line-height: 1.5;
+    max-width: 50ch;
+  }
+
+  /* ---- question ---- */
+  .progress-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+  }
+  .progress-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--ink-faint);
+  }
+  .progress-track {
+    height: 5px;
+    background: var(--line);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 30px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--brass);
+    border-radius: 3px;
+    transition: width .35s ease;
+  }
+  @media (prefers-reduced-motion: reduce) { .progress-fill { transition: none; } }
+
+  .question-card {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 30px 28px;
+    box-shadow: var(--shadow);
+  }
+  .question-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .question-text {
+    font-size: 21px;
+    line-height: 1.4;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  textarea.answer-input {
+    width: 100%;
+    min-height: 100px;
+    resize: vertical;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1.5px solid var(--line-strong);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  textarea.answer-input:focus {
+    outline: none;
+    border-color: var(--brass);
+  }
+  textarea.answer-input::placeholder { color: var(--ink-faint); }
+  .question-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+  .question-hint {
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    margin-top: 12px;
+  }
+
+  /* ---- loading ---- */
+  .loading-wrap {
+    padding: 70px 10px;
+    text-align: center;
+  }
+  .loading-glyph {
+    width: 56px; height: 56px;
+    margin: 0 auto 26px;
+    border: 2px solid var(--line-strong);
+    border-top-color: var(--brass);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .loading-glyph { animation: none; border-top-color: var(--line-strong); }
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    min-height: 20px;
+  }
+  .loading-wrap .btn-ghost { margin-top: 30px; }
+
+  /* ---- error ---- */
+  .error-card {
+    border: 1.5px solid var(--danger);
+    background: var(--paper-raised);
+    border-radius: 14px;
+    padding: 28px;
+  }
+  .error-card h2 { font-size: 20px; margin-bottom: 10px; color: var(--danger); }
+  .error-card p { color: var(--ink-soft); font-size: 15px; line-height: 1.6; margin: 0 0 20px; }
+  .error-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* ---- analyse ---- */
+  .analyse-block { padding: 16px 0; border-top: 1px solid var(--line); }
+  .analyse-block:first-child { padding-top: 0; border-top: none; }
+  .analyse-text { font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; margin: 6px 0 0; }
+  .analyse-toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .analyse-toggle-row h3 { margin-bottom: 0; }
+  #result-analyse-list { margin-top: 18px; }
+
+  /* ---- result ---- */
+  .result-header { margin-bottom: 8px; }
+  .result-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--brass);
+    display: block;
+    margin-bottom: 12px;
+  }
+  .result-header h2 { font-size: clamp(24px, 4vw, 30px); font-weight: 600; margin-bottom: 12px; }
+  .positioning-text {
+    color: var(--ink-soft);
+    font-size: 15.5px;
+    line-height: 1.65;
+    max-width: 68ch;
+    margin: 0 0 30px;
+  }
+
+  .funnel-diagram { width: 100%; height: auto; display: block; margin-bottom: 34px; }
+  .funnel-diagram text { font-family: 'IBM Plex Mono', monospace; }
+  .funnel-band-index { font-size: 10px; fill: rgba(255,255,255,.75); letter-spacing: .04em; }
+  .funnel-band-name { font-size: 13px; font-weight: 600; fill: #fff; letter-spacing: .03em; }
+  .funnel-band-price { font-size: 11.5px; fill: rgba(255,255,255,.85); }
+
+  .stage-price {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--brass-strong);
+    white-space: nowrap;
+  }
+
+  .section-block { margin: 46px 0 0; }
+  .section-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--brass);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .section-block h3 { font-size: 21px; font-weight: 600; margin-bottom: 6px; }
+  .section-caption { font-size: 14px; color: var(--ink-soft); margin: 0 0 22px; max-width: 62ch; }
+
+  /* ---- overview table ---- */
+  .overview-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .overview-table th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-align: left;
+    padding: 0 10px 10px 0;
+    border-bottom: 1.5px solid var(--line-strong);
+  }
+  .overview-table td {
+    padding: 14px 10px 14px 0;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+    color: var(--ink-soft);
+    line-height: 1.45;
+  }
+  .overview-table td:first-child { color: var(--ink); font-weight: 600; white-space: nowrap; }
+  .overview-table tr:last-child td { border-bottom: none; }
+  .overview-price {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--brass-strong);
+    background: var(--brass-tint);
+    border-radius: 999px;
+    padding: 3px 10px;
+    white-space: nowrap;
+  }
+  .overview-wrap { overflow-x: auto; }
+
+  /* ---- stage detail ---- */
+  .stage-detail-list { display: grid; gap: 18px; }
+  .stage-detail {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--stage-color, var(--brass));
+    border-radius: 10px;
+    padding: 24px 26px;
+    box-shadow: var(--shadow);
+  }
+  .stage-detail-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 4px;
+  }
+  .stage-detail-name { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 600; }
+  .idea-row {
+    display: flex;
+    gap: 12px;
+    padding: 15px 0;
+    border-top: 1px solid var(--line);
+  }
+  .idea-row:first-of-type { border-top: none; padding-top: 16px; }
+  .idea-num {
+    flex: none;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 1px solid var(--line-strong);
+    display: grid; place-items: center;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 1px;
+  }
+  .idea-title { font-size: 14.5px; font-weight: 600; margin-bottom: 3px; }
+  .idea-versprechen { font-style: italic; color: var(--ink); font-size: 13.5px; line-height: 1.5; margin: 0 0 8px; }
+  .idea-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+  .idea-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2px 8px;
+  }
+  .idea-pe { display: flex; gap: 8px; font-size: 13px; line-height: 1.5; margin-top: 6px; }
+  .idea-pe span {
+    flex: none;
+    width: 86px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 3px;
+  }
+  .idea-pe p { margin: 0; color: var(--ink-soft); }
+
+  .stage-skip {
+    border: 1px dashed var(--line-strong);
+    border-left: 4px solid var(--stage-color, var(--line-strong));
+    border-radius: 10px;
+    padding: 16px 22px;
+    opacity: .8;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .stage-skip-reason { font-size: 13px; color: var(--ink-faint); margin: 0; }
+
+  /* ---- hauptprodukt ---- */
+  .haupt-list { display: grid; gap: 14px; }
+  .haupt-card {
+    background: var(--paper-raised);
+    border: 1.5px solid var(--brass);
+    border-radius: 10px;
+    padding: 22px 24px;
+  }
+  .haupt-card-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+  .haupt-title { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 600; }
+  .haupt-meta { display: flex; flex-direction: column; gap: 8px; font-size: 13px; margin-bottom: 12px; }
+  .haupt-meta div span:first-child {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-right: 8px;
+    display: inline-block;
+    min-width: 130px;
+  }
+  .haupt-why { font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; margin: 8px 0 0; padding-top: 8px; border-top: 1px dashed var(--line); }
+
+  /* ---- conversion pfad ---- */
+  .conv-list { display: grid; gap: 16px; }
+  .conv-row {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 24px;
+  }
+  .conv-chips { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: var(--line);
+    color: var(--ink-soft);
+  }
+  .chip.is-accent { background: var(--brass-strong); color: #fff; }
+  .conv-arrow { color: var(--ink-faint); }
+  .conv-body { max-width: 62ch; }
+  .conv-quote { margin: 10px 0 0; font-size: 14px; color: var(--ink); line-height: 1.55; font-style: italic; }
+
+  /* ---- qualitaetscheck ---- */
+  .qualitaets-panel {
+    margin-top: 40px;
+    border: 1.5px solid var(--brass);
+    background: var(--brass-tint);
+    border-radius: 12px;
+    padding: 22px 26px;
+  }
+  .qualitaets-panel .section-eyebrow { margin-bottom: 8px; }
+  .qualitaets-text { font-size: 14.5px; color: var(--ink); line-height: 1.6; margin: 0; }
+
+  .result-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 34px;
+    flex-wrap: wrap;
+  }
+  .pdf-status {
+    font-size: 12.5px;
+    color: var(--ink-faint);
+  }
+  .pdf-status.is-error { color: var(--danger); }
+
+  @media (max-width: 520px) {
+    .question-card { padding: 24px 20px; }
+    .stage-detail, .haupt-card { padding: 18px 18px; }
+  }
+</style>
+
+<div class="app" id="app">
+  <div class="topbar">
+    <div class="brand">
+      <span class="brand-mark">FS</span>
+      <span class="brand-name">Funnelschmiede</span>
+    </div>
+    <button class="restart-link" id="restart-btn" hidden>Von vorne</button>
+  </div>
+
+  <main class="screen intro" id="screen-intro">
+    <span class="intro-eyebrow">Funnelschmiede</span>
+    <h1>Deine eigene Funnelschmiede.</h1>
+    <p class="lede">Angetrieben von deinem eigenen Masterprompt und deiner Wissensdatei: 5 kurze Fragen zu deinem Business, eine strategische Analyse zur Freigabe, und erst dann eine Produkttreppe mit genau so vielen Stufen, wie strategisch sinnvoll sind – nicht mehr.</p>
+    <ol class="intro-steps">
+      <li><span class="num mono">01</span> <span><strong>Business verstehen</strong> – 5 kurze Fragen zu Zielgruppe, Problem, Produkten und Hauptangebot</span></li>
+      <li><span class="num mono">02</span> <span><strong>Strategische Analyse</strong> – Kundenweg, Produktlücken und Empfehlung, die du erst freigibst</span></li>
+      <li><span class="num mono">03</span> <span><strong>Produkttreppe</strong> – jede Stufe mit Produktideen, Conversion-Pfad und Qualitätscheck, als PDF speicherbar</span></li>
+    </ol>
+    <button class="btn-primary" id="start-btn">Business verstehen</button>
+    <!-- Vorschlag - von Hanna freizugeben. Link zur Datenschutzerklaerung noch eintragen.
+     Sobald die Mailabfrage dazukommt, muss der zweite Satz erweitert werden. -->
+    <p class="privacy-note">Deine Angaben werden zur Erstellung deiner Analyse an unseren KI-Dienstleister Anthropic (USA) übermittelt und dort verarbeitet. Sie werden nicht gespeichert, nicht an Dritte weitergegeben und nicht für Werbung verwendet. Mehr dazu in der <a href="#" rel="noopener">Datenschutzerklärung</a>.</p>
+  </main>
+
+  <main class="screen" id="screen-question" hidden>
+    <div class="progress-row">
+      <span class="progress-label mono" id="progress-label">FRAGE 1 / 11</span>
+      <span class="progress-label mono" id="progress-tag">THEMA</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:9%"></div></div>
+
+    <div class="question-card">
+      <span class="question-eyebrow" id="question-eyebrow">Thema &amp; Expertise</span>
+      <div class="question-text" id="question-text"></div>
+      <textarea class="answer-input" id="answer-input" placeholder=""></textarea>
+      <p class="question-hint">Stichpunkte reichen völlig – konkrete Angaben helfen mehr als lange Erklärungen.</p>
+      <div class="question-actions">
+        <button class="btn-ghost" id="back-btn">Zurück</button>
+        <button class="btn-primary" id="next-btn">Weiter</button>
+      </div>
+    </div>
+  </main>
+
+  <main class="screen" id="screen-loading" hidden>
+    <div class="loading-wrap">
+      <div class="loading-glyph" aria-hidden="true"></div>
+      <div class="loading-text mono" id="loading-text">Ich lese deine Antworten …</div>
+      <button class="btn-ghost" id="cancel-btn">Abbrechen</button>
+    </div>
+  </main>
+
+  <main class="screen" id="screen-error" hidden>
+    <div class="error-card">
+      <h2>Das hat nicht geklappt</h2>
+      <p id="error-message"></p>
+      <div class="error-actions">
+        <button class="btn-primary" id="retry-btn">Nochmal versuchen</button>
+        <button class="btn-ghost" id="error-back-btn">Zur Startseite</button>
+      </div>
+    </div>
+  </main>
+
+  <main class="screen" id="screen-analyse" hidden>
+    <div class="result-header">
+      <span class="result-eyebrow">Phase 2 · Strategische Analyse</span>
+      <h2>So sieht dein Business gerade aus</h2>
+    </div>
+    <div class="question-card" id="analyse-list"></div>
+    <div class="result-actions">
+      <button class="btn-primary" id="approve-btn">Produkttreppe erstellen</button>
+      <button class="btn-ghost" id="analyse-regenerate-btn">Analyse neu generieren</button>
+      <button class="btn-ghost" id="analyse-back-btn">Zurück zu den Fragen</button>
+    </div>
+  </main>
+
+  <main class="screen" id="screen-result" hidden>
+    <div class="result-header">
+      <span class="result-eyebrow">Phase 3–6 · Deine Produkttreppe</span>
+      <h2 id="result-heading">Vom Lead-Magnet zum Hauptprodukt</h2>
+    </div>
+    <p class="positioning-text" id="positioning-text"></p>
+    <svg class="funnel-diagram" id="funnel-svg" viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg"></svg>
+
+    <div class="section-block">
+      <div class="analyse-toggle-row">
+        <div>
+          <span class="section-eyebrow">Phase 2</span>
+          <h3>Deine strategische Analyse</h3>
+        </div>
+        <button class="btn-ghost" id="analyse-toggle-btn">Analyse anzeigen</button>
+      </div>
+      <div class="question-card" id="result-analyse-list" hidden></div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-eyebrow">Übersicht</span>
+      <h3>Deine Stufen auf einen Blick</h3>
+      <p class="section-caption">Nur Stufen, die eine echte strategische Funktion haben – nicht mehr.</p>
+      <div class="overview-wrap">
+        <table class="overview-table">
+          <thead>
+            <tr><th>Stufe</th><th>Produkt</th><th>Preis</th><th>Ergebnis</th></tr>
+          </thead>
+          <tbody id="overview-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-eyebrow">Im Detail</span>
+      <h3>Jede Stufe einzeln</h3>
+      <p class="section-caption">Zwei Produktideen je Stufe, jeweils mit Zielgruppe, Problem, Ergebnis und Kaufgrund.</p>
+      <div class="stage-detail-list" id="stage-detail-list"></div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-eyebrow">Hauptprodukt</span>
+      <h3>Dein zentrales Transformationsangebot</h3>
+      <div class="haupt-list" id="haupt-list"></div>
+    </div>
+
+    <div class="section-block">
+      <span class="section-eyebrow">Conversion-Pfad</span>
+      <h3>So führt eine Stufe zur nächsten</h3>
+      <p class="section-caption">Erreichtes Ergebnis, nächstes Problem, Logik und Überleitung je Übergang.</p>
+      <div class="conv-list" id="conv-list"></div>
+    </div>
+
+    <div class="qualitaets-panel" id="qualitaets-panel" hidden>
+      <span class="section-eyebrow">KI-Qualitätscheck</span>
+      <p class="qualitaets-text" id="qualitaets-text"></p>
+    </div>
+
+    <div class="result-actions">
+      <button class="btn-primary" id="pdf-btn">Als PDF speichern</button>
+      <button class="btn-ghost" id="regenerate-btn">Neu generieren</button>
+      <button class="btn-ghost" id="result-restart-btn">Von vorne beginnen</button>
+      <span class="pdf-status" id="pdf-status"></span>
+    </div>
+  </main>
+</div>
+
+<script src="config.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/4.2.1/jspdf.umd.min.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  // --- Konfiguration ---------------------------------------------------
+  // Masterprompt und Wissensdatei liegen bewusst NICHT mehr in dieser Datei,
+  // sondern in n8n. Dieses Repo ist public.
+  // Die Webhook-URL steht NICHT im Repo. Sie kommt aus config.js,
+  // das beim Vercel-Build aus der Environment-Variable PTA_API_URL erzeugt wird.
+  var API_URL = window.PTA_API_URL || "";          // startet den Job
+  var STATUS_URL = window.PTA_STATUS_URL || "";    // fragt den Job ab
+  var POLL_FIRST_DELAY_MS = 40000;                 // vor der ersten Nachfrage warten - vorher ist nie etwas fertig
+  var POLL_INTERVAL_MS = 15000;                    // Abstand zwischen zwei Nachfragen
+  var POLL_TIMEOUT_MS = 600000;                    // nach 10 Minuten geben wir auf
+
+  var STAGE_META = [
+    { id: "lead-magnet", label: "Lead-Magnet" },
+    { id: "miniprodukt", label: "Miniprodukt / Tripwire" },
+    { id: "order-bump", label: "Order Bump" },
+    { id: "upsell-1", label: "Upsell 1" },
+    { id: "upsell-2", label: "Upsell 2" },
+    { id: "ergaenzung", label: "Ergänzungsprodukt / Quick-Win" }
+  ];
+  var HAUPT_LABEL = "Hauptprodukt";
+
+  var ANALYSE_FIELDS = [
+    { key: "ausgangssituation", label: "Ausgangssituation" },
+    { key: "zentralesProblem", label: "Zentrales Kundenproblem" },
+    { key: "kundenweg", label: "Kundenweg" },
+    { key: "produktluecken", label: "Produktlücken" },
+    { key: "hauptproduktEmpfehlung", label: "Empfehlung fürs Hauptprodukt" },
+    { key: "risiken", label: "Risiken" },
+    { key: "empfehlung", label: "Gesamtempfehlung" }
+  ];
+
+  var QUESTIONS = [
+    { eyebrow: "Zielgruppe & Angebot", tag: "ZIELGRUPPE",
+      text: "Wer sind deine idealen Kunden, und welche Art von Produkten verkaufst du (oder willst du verkaufen)?",
+      placeholder: "z. B. Business-Coaches, die einen Signature-Kurs launchen wollen, Pakete zwischen 200 und 2000 €" },
+    { eyebrow: "Größtes Hindernis", tag: "PROBLEM",
+      text: "Was ist aktuell das größte Problem deiner Kunden, das sie vom Kaufen oder von Ergebnissen abhält?",
+      placeholder: "z. B. sie wissen nicht, wie sie ihr Wissen in ein verkaufbares Kursformat bringen" },
+    { eyebrow: "Bestehende Produkte", tag: "PRODUKTE",
+      text: "Liste bitte alle Produkte auf, die du aktuell hast oder planst – inklusive Preise.",
+      placeholder: "z. B. Mini-Kurs 47 €, Gruppenprogramm 497 €, 1:1 Coaching 1800 €" },
+    { eyebrow: "Lead-Magnet", tag: "LEAD-MAGNET",
+      text: "Hast du bereits einen Lead-Magneten? Wenn ja, welchen? Wenn nein, baue ich dir einen passenden.",
+      placeholder: "z. B. Checkliste, Mini-Training, Quiz – oder „noch keinen“" },
+    { eyebrow: "Hauptprodukt", tag: "HAUPTPRODUKT",
+      text: "Hast du ein Hauptprodukt/High-Ticket-Angebot, auf das dein Funnel hinausläuft? Wenn nein, entwickle ich es für dich.",
+      placeholder: "z. B. 3-monatiges 1:1-Coaching für 2500 € – oder „noch offen“" }
+  ];
+
+  var LOADING_MESSAGES_ANALYSE = [
+    "Ich lese deine Antworten …",
+    "Ich suche das zentrale Kundenproblem …",
+    "Ich zeichne deinen Kundenweg nach …",
+    "Ich prüfe Risiken und Überschneidungen …",
+    "Fast fertig – letzter Schliff an der Empfehlung …"
+  ];
+  var LOADING_MESSAGES_TREPPE = [
+    "Ich prüfe, welche Stufen wirklich nötig sind …",
+    "Ich baue jede Produktidee einzeln aus …",
+    "Ich verbinde die Stufen zum Conversion-Pfad …",
+    "Ich mache den Qualitätscheck …",
+    "Fast fertig – letzter Schliff …"
+  ];
+
+  var STAGE_COLORS = ["#7fa79f", "#6f9c92", "#5f9086", "#4f8379", "#40766c", "#33685f", "#275a51"];
+
+  var answers = QUESTIONS.map(function () { return ""; });
+  var currentQuestion = 0;
+  var currentAbort = null;
+  var loadingInterval = null;
+  var lastAnalyse = null;
+  var lastData = null;
+  var loadingStage = null;
+  var pendingGenerate = null;
+
+  var els = {};
+  ["screen-intro","screen-question","screen-loading","screen-error","screen-analyse","screen-result",
+   "start-btn","progress-label","progress-tag","progress-fill","question-eyebrow",
+   "question-text","answer-input","back-btn","next-btn","loading-text","cancel-btn",
+   "error-message","retry-btn","error-back-btn","restart-btn",
+   "analyse-list","approve-btn","analyse-regenerate-btn","analyse-back-btn",
+   "positioning-text","funnel-svg","regenerate-btn","result-restart-btn",
+   "result-analyse-list","analyse-toggle-btn",
+   "overview-body","stage-detail-list","haupt-list","conv-list",
+   "qualitaets-panel","qualitaets-text","pdf-btn","pdf-status",
+   "app"].forEach(function (id) { els[id] = document.getElementById(id); });
+
+  function clearNode(node) { while (node.firstChild) node.removeChild(node.firstChild); }
+
+  function el(tag, className, text) {
+    var e = document.createElement(tag);
+    if (className) e.className = className;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  function showScreen(name) {
+    ["intro","question","loading","error","analyse","result"].forEach(function (n) {
+      els["screen-" + n].hidden = (n !== name);
+    });
+    els["restart-btn"].hidden = (name === "intro");
+    els.app.classList.toggle("is-result", name === "analyse" || name === "result");
+  }
+
+  function renderQuestion() {
+    var q = QUESTIONS[currentQuestion];
+    els["progress-label"].textContent = "FRAGE " + (currentQuestion + 1) + " / " + QUESTIONS.length;
+    els["progress-tag"].textContent = q.tag;
+    els["progress-fill"].style.width = (((currentQuestion + 1) / QUESTIONS.length) * 100) + "%";
+    els["question-eyebrow"].textContent = q.eyebrow;
+    els["question-text"].textContent = q.text;
+    els["answer-input"].placeholder = q.placeholder;
+    els["answer-input"].value = answers[currentQuestion];
+    els["back-btn"].disabled = currentQuestion === 0;
+    els["next-btn"].textContent = currentQuestion === QUESTIONS.length - 1 ? "Analyse starten" : "Weiter";
+    els["answer-input"].focus();
+  }
+
+  function goToQuestion(index) {
+    currentQuestion = index;
+    showScreen("question");
+    renderQuestion();
+  }
+
+  els["start-btn"].addEventListener("click", function () { goToQuestion(0); });
+
+  els["back-btn"].addEventListener("click", function () {
+    answers[currentQuestion] = els["answer-input"].value;
+    if (currentQuestion === 0) return;
+    goToQuestion(currentQuestion - 1);
+  });
+
+  els["next-btn"].addEventListener("click", function () {
+    var val = els["answer-input"].value.trim();
+    if (!val) { els["answer-input"].focus(); return; }
+    answers[currentQuestion] = val;
+    if (currentQuestion < QUESTIONS.length - 1) {
+      goToQuestion(currentQuestion + 1);
+    } else {
+      generateAnalyse();
+    }
+  });
+
+  function resetAll() {
+    answers = QUESTIONS.map(function () { return ""; });
+    currentQuestion = 0;
+    lastAnalyse = null;
+    lastData = null;
+    showScreen("intro");
+  }
+
+  els["restart-btn"].addEventListener("click", resetAll);
+  els["error-back-btn"].addEventListener("click", resetAll);
+  els["result-restart-btn"].addEventListener("click", resetAll);
+
+  els["retry-btn"].addEventListener("click", function () { if (pendingGenerate) pendingGenerate(); });
+  els["approve-btn"].addEventListener("click", function () { generateTreppe(); });
+  els["analyse-regenerate-btn"].addEventListener("click", function () { generateAnalyse(); });
+  els["analyse-back-btn"].addEventListener("click", function () { goToQuestion(QUESTIONS.length - 1); });
+  els["regenerate-btn"].addEventListener("click", function () { generateTreppe(); });
+
+  els["cancel-btn"].addEventListener("click", function () {
+    if (currentAbort) currentAbort.abort();
+  });
+
+  function answersBlock() {
+    return QUESTIONS.map(function (q, i) {
+      return { thema: q.eyebrow, frage: q.text, antwort: answers[i] };
+    });
+  }
+
+  // Schickt die Antworten an die API. Prompt und Wissensdatei werden
+  // serverseitig in n8n ergaenzt, hier gehen nur die Nutzereingaben raus.
+  function sleep(ms, ctl) {
+    return new Promise(function (resolve, reject) {
+      var t = setTimeout(function () { resolve(); }, ms);
+      if (ctl && ctl.signal) {
+        ctl.signal.addEventListener("abort", function () {
+          clearTimeout(t);
+          reject({ code: "cancelled" });
+        }, { once: true });
+      }
+    });
+  }
+
+  async function postJson(url, body, ctl) {
+    var res;
+    try {
+      res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+        signal: ctl.signal
+      });
+    } catch (e) {
+      if (e && e.name === "AbortError") throw { code: "cancelled" };
+      throw { code: "network" };
+    }
+
+    if (res.status === 429) throw { code: "rate_limited" };
+    if (!res.ok) throw { code: res.status >= 500 ? "upstream_error" : "bad_request" };
+
+    try {
+      return await res.json();
+    } catch (e) {
+      throw { code: "invalid_json" };
+    }
+  }
+
+  // Zweistufig: Job starten, danach in Abstaenden nachfragen, bis das Ergebnis da ist.
+  // Noetig, weil eine offene Verbindung nach rund zwei Minuten gekappt wird,
+  // der zweite Schritt aber laenger rechnet.
+  async function callApi(step, extra, ctl) {
+    if (!API_URL || !STATUS_URL) throw { code: "not_configured" };
+
+    var body = { step: step, antworten: answersBlock() };
+    if (extra) {
+      Object.keys(extra).forEach(function (k) { body[k] = extra[k]; });
+    }
+
+    var start = await postJson(API_URL, body, ctl);
+    if (start && start.ok === false) throw { code: start.code || "upstream_error" };
+    var jobId = start && start.jobId;
+    if (!jobId) throw { code: "upstream_error" };
+
+    var deadline = Date.now() + POLL_TIMEOUT_MS;
+    var first = true;
+
+    while (true) {
+      await sleep(first ? POLL_FIRST_DELAY_MS : POLL_INTERVAL_MS, ctl);
+      first = false;
+      if (Date.now() > deadline) throw { code: "timeout" };
+
+      var state = await postJson(STATUS_URL, { jobId: jobId }, ctl);
+      var status = state && state.status;
+
+      if (status === "done") return state.data;
+      if (status === "error") throw { code: state.code || "upstream_error" };
+      // "running" oder "unknown" -> naechste Runde.
+      // "unknown" ist normal, solange der Job noch laeuft: n8n schreibt den
+      // Ablagestand erst, wenn die Ausfuehrung fertig ist.
+    }
+  }
+
+  function startLoadingMessages(list) {
+    var i = 0;
+    els["loading-text"].textContent = list[0];
+    loadingInterval = setInterval(function () {
+      i = (i + 1) % list.length;
+      els["loading-text"].textContent = list[i];
+    }, 3200);
+  }
+  function stopLoadingMessages() {
+    if (loadingInterval) { clearInterval(loadingInterval); loadingInterval = null; }
+  }
+
+  function showError(message, opts) {
+    opts = opts || {};
+    els["error-message"].textContent = message;
+    els["retry-btn"].hidden = opts.retryable === false;
+    showScreen("error");
+  }
+
+  var ERROR_COPY = {
+    not_configured: "Das Tool ist noch nicht vollständig eingerichtet (fehlende API-Adresse).",
+    job_lost: "Die Auswertung ist unterwegs verloren gegangen. Versuch es noch einmal.",
+    network: "Keine Verbindung zum Server. Prüf deine Internetverbindung und versuch es noch einmal.",
+    timeout: "Die Analyse hat zu lange gedauert. Versuch es noch einmal.",
+    bad_request: "Die Anfrage konnte nicht verarbeitet werden.",
+    rate_limited: "Gerade zu viele Anfragen. Versuch es gleich noch einmal.",
+    refused: "Claude konnte darauf keine Antwort geben. Ändere ein, zwei Antworten und versuch es erneut.",
+    empty_completion: "Es kam keine Antwort zurück. Versuch es mit etwas kürzeren Angaben.",
+    invalid_json: "Die Antwort kam in einem unerwarteten Format zurück.",
+    prompt_too_large: "Deine Antworten sind zusammen zu lang. Fass sie etwas knapper.",
+    upstream_error: "Kurzer Aussetzer beim KI-Dienst. Versuch es noch einmal."
+  };
+  var NO_RETRY_CODES = [];
+
+  async function generateAnalyse() {
+    loadingStage = "analyse";
+    pendingGenerate = generateAnalyse;
+    showScreen("loading");
+    startLoadingMessages(LOADING_MESSAGES_ANALYSE);
+
+    var ctl = new AbortController();
+    currentAbort = ctl;
+
+    try {
+      var data = await callApi("analyse", null, ctl);
+      stopLoadingMessages();
+      if (!data || !data.kundenweg || !data.empfehlung) {
+        showError("Die Antwort hatte nicht die erwartete Form. Versuch es noch einmal.", { retryable: true });
+        return;
+      }
+      lastAnalyse = data;
+      renderAnalyse(data);
+      showScreen("analyse");
+    } catch (e) {
+      stopLoadingMessages();
+      if (e && e.code === "cancelled") { goToQuestion(QUESTIONS.length - 1); return; }
+      var code = e && e.code;
+      var msg = ERROR_COPY[code] || "Unbekannter Fehler bei der KI-Anfrage.";
+      showError(msg, { retryable: NO_RETRY_CODES.indexOf(code) === -1 });
+    } finally {
+      currentAbort = null;
+    }
+  }
+
+  async function generateTreppe() {
+    loadingStage = "treppe";
+    pendingGenerate = generateTreppe;
+    showScreen("loading");
+    startLoadingMessages(LOADING_MESSAGES_TREPPE);
+
+    var ctl = new AbortController();
+    currentAbort = ctl;
+
+    try {
+      var data = await callApi("treppe", { analyse: lastAnalyse }, ctl);
+      stopLoadingMessages();
+      if (!data || !Array.isArray(data.stages) || data.stages.length !== 6 || !data.hauptprodukt) {
+        showError("Die Antwort hatte nicht die erwartete Form. Versuch es noch einmal.", { retryable: true });
+        return;
+      }
+      lastData = data;
+      try { localStorage.setItem("fs-last-result", JSON.stringify({ analyse: lastAnalyse, treppe: data })); } catch (e) {}
+      renderResult(data);
+      showScreen("result");
+    } catch (e) {
+      stopLoadingMessages();
+      if (e && e.code === "cancelled") { showScreen("analyse"); return; }
+      var code = e && e.code;
+      var msg = ERROR_COPY[code] || "Unbekannter Fehler bei der KI-Anfrage.";
+      showError(msg, { retryable: NO_RETRY_CODES.indexOf(code) === -1 });
+    } finally {
+      currentAbort = null;
+    }
+  }
+
+  function renderAnalyseInto(container, data) {
+    clearNode(container);
+    ANALYSE_FIELDS.forEach(function (f) {
+      if (!data[f.key]) return;
+      var block = el("div", "analyse-block");
+      block.appendChild(el("span", "section-eyebrow", f.label));
+      block.appendChild(el("p", "analyse-text", data[f.key]));
+      container.appendChild(block);
+    });
+  }
+
+  function renderAnalyse(data) {
+    renderAnalyseInto(els["analyse-list"], data);
+  }
+
+  els["analyse-toggle-btn"].addEventListener("click", function () {
+    var box = els["result-analyse-list"];
+    var willShow = box.hidden;
+    box.hidden = !willShow;
+    els["analyse-toggle-btn"].textContent = willShow ? "Analyse ausblenden" : "Analyse anzeigen";
+  });
+
+  function buildOverviewRows(data) {
+    var rows = [];
+    (data.stages || []).forEach(function (st, i) {
+      if (!st || !st.istEnthalten) return;
+      var idea = (st.ideen && st.ideen[0]) || {};
+      rows.push({
+        label: STAGE_META[i].label,
+        produkt: idea.titel || "",
+        preis: idea.preis || st.preisbereich || "",
+        ergebnis: idea.ergebnis || ""
+      });
+    });
+    var haupt = data.hauptprodukt || {};
+    rows.push({ label: HAUPT_LABEL, produkt: haupt.titel || "", preis: haupt.preis || "", ergebnis: haupt.zielzustand || "" });
+    return rows;
+  }
+
+  function buildFunnelSvg(bands) {
+    var n = bands.length;
+    var widths = [];
+    // Monospace: ein Zeichen ist rund 0,6 der Schriftgroesse breit.
+    function fitSize(text, maxWidth, base, min) {
+      var len = (text || "").length || 1;
+      return Math.max(min, Math.min(base, maxWidth / (len * 0.6)));
+    }
+    function splitPrice(price, maxWidth) {
+      if (!price) return [""];
+      if (fitSize(price, maxWidth, 11.5, 0) >= 9) return [price];
+      var parts = price.split(/\s+oder\s+/i);
+      if (parts.length === 2) return [parts[0], "oder " + parts[1]];
+      var open = price.indexOf("(");
+      if (open > 0) return [price.slice(0, open).trim(), price.slice(open).trim()];
+      return [price];
+    }
+
+    var maxW = 560, minW = 330;
+    for (var i = 0; i <= n; i++) widths.push(maxW - (maxW - minW) * (i / n));
+    var bandH = 46, gap = 6, top = 6;
+    var cx = 320;
+    var totalH = top * 2 + n * bandH + (n - 1) * gap;
+    var svg = els["funnel-svg"];
+    svg.setAttribute("viewBox", "0 0 640 " + totalH);
+    var ns = "http://www.w3.org/2000/svg";
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    for (var s = 0; s < n; s++) {
+      var yTop = top + s * (bandH + gap);
+      var yBot = yTop + bandH;
+      var wTop = widths[s], wBot = widths[s + 1];
+      var pts = [
+        (cx - wTop / 2) + "," + yTop, (cx + wTop / 2) + "," + yTop,
+        (cx + wBot / 2) + "," + yBot, (cx - wBot / 2) + "," + yBot
+      ].join(" ");
+      var poly = document.createElementNS(ns, "polygon");
+      poly.setAttribute("points", pts);
+      poly.setAttribute("fill", STAGE_COLORS[s % STAGE_COLORS.length]);
+      svg.appendChild(poly);
+
+      var idxText = document.createElementNS(ns, "text");
+      idxText.setAttribute("x", cx - wTop / 2 + 12);
+      idxText.setAttribute("y", yTop + bandH / 2 + 3);
+      idxText.setAttribute("class", "funnel-band-index");
+      idxText.textContent = String(s + 1).padStart(2, "0");
+      svg.appendChild(idxText);
+
+      // Nutzbare Breite ist die schmalste Stelle des Bandes, minus Platz fuer die Nummer.
+      var avail = Math.min(wTop, wBot) - 64;
+
+      var label = (bands[s].label || "").toUpperCase();
+      var nameText = document.createElementNS(ns, "text");
+      nameText.setAttribute("x", cx);
+      nameText.setAttribute("y", yTop + bandH / 2 - 3);
+      nameText.setAttribute("text-anchor", "middle");
+      nameText.setAttribute("class", "funnel-band-name");
+      nameText.setAttribute("font-size", fitSize(label, avail, 13, 7.5));
+      nameText.textContent = label;
+      svg.appendChild(nameText);
+
+      // Lange Preisangaben ("147 EUR einmalig oder 47 EUR/Monat") auf zwei Zeilen umbrechen.
+      var priceLines = splitPrice(bands[s].price || "", avail);
+      var priceSize = priceLines.reduce(function (acc, line) {
+        return Math.min(acc, fitSize(line, avail, 11.5, 7));
+      }, 11.5);
+      var priceY = yTop + bandH / 2 + (priceLines.length > 1 ? 9 : 13);
+
+      priceLines.forEach(function (line, li) {
+        var priceText = document.createElementNS(ns, "text");
+        priceText.setAttribute("x", cx);
+        priceText.setAttribute("y", priceY + li * (priceSize + 1.5));
+        priceText.setAttribute("text-anchor", "middle");
+        priceText.setAttribute("class", "funnel-band-price");
+        priceText.setAttribute("font-size", priceSize);
+        priceText.textContent = line;
+        svg.appendChild(priceText);
+      });
+    }
+  }
+
+  function renderResult(data) {
+    els["positioning-text"].textContent = data.positioning || "";
+
+    if (lastAnalyse) renderAnalyseInto(els["result-analyse-list"], lastAnalyse);
+    els["result-analyse-list"].hidden = true;
+    els["analyse-toggle-btn"].textContent = "Analyse anzeigen";
+
+    var rows = buildOverviewRows(data);
+    buildFunnelSvg(rows.map(function (r) { return { label: r.label, price: r.preis }; }));
+
+    var body = els["overview-body"];
+    clearNode(body);
+    rows.forEach(function (row) {
+      var tr = document.createElement("tr");
+      tr.appendChild(el("td", null, row.label));
+      tr.appendChild(el("td", null, row.produkt));
+      var priceTd = document.createElement("td");
+      priceTd.appendChild(el("span", "overview-price tabular", row.preis));
+      tr.appendChild(priceTd);
+      tr.appendChild(el("td", null, row.ergebnis));
+      body.appendChild(tr);
+    });
+
+    var detailList = els["stage-detail-list"];
+    clearNode(detailList);
+    (data.stages || []).forEach(function (st, i) {
+      var meta = STAGE_META[i];
+      if (!meta) return;
+      if (!st || !st.istEnthalten) {
+        var skip = el("div", "stage-skip");
+        skip.style.setProperty("--stage-color", STAGE_COLORS[i % STAGE_COLORS.length]);
+        skip.appendChild(el("span", "stage-detail-name", meta.label));
+        skip.appendChild(el("p", "stage-skip-reason",
+          "Nicht enthalten" + (st && st.grundWennAusgelassen ? " — " + st.grundWennAusgelassen : ".")));
+        detailList.appendChild(skip);
+        return;
+      }
+      var card = el("div", "stage-detail");
+      card.style.setProperty("--stage-color", STAGE_COLORS[i % STAGE_COLORS.length]);
+      var top = el("div", "stage-detail-top");
+      top.appendChild(el("span", "stage-detail-name", meta.label));
+      top.appendChild(el("span", "stage-price tabular", st.preisbereich || ""));
+      card.appendChild(top);
+
+      (st.ideen || []).forEach(function (idea, j) {
+        var row = el("div", "idea-row");
+        row.appendChild(el("span", "idea-num mono", String(j + 1)));
+        var bodyDiv = el("div");
+        bodyDiv.appendChild(el("div", "idea-title", idea.titel || ""));
+        if (idea.versprechen) bodyDiv.appendChild(el("p", "idea-versprechen", idea.versprechen));
+        var tags = el("div", "idea-tags");
+        if (idea.zielgruppe) tags.appendChild(el("span", "idea-tag", "Zielgruppe: " + idea.zielgruppe));
+        if (idea.format) tags.appendChild(el("span", "idea-tag", "Format: " + idea.format));
+        if (idea.preis) tags.appendChild(el("span", "idea-tag", "Preis: " + idea.preis));
+        if (tags.childNodes.length) bodyDiv.appendChild(tags);
+        [["Problem", idea.problem], ["Ergebnis", idea.ergebnis], ["Kaufgrund", idea.kaufgrund]].forEach(function (pair) {
+          if (!pair[1]) return;
+          var pe = el("div", "idea-pe");
+          pe.appendChild(el("span", null, pair[0]));
+          pe.appendChild(el("p", null, pair[1]));
+          bodyDiv.appendChild(pe);
+        });
+        row.appendChild(bodyDiv);
+        card.appendChild(row);
+      });
+      detailList.appendChild(card);
+    });
+
+    var haupt = data.hauptprodukt || {};
+    var hauptList = els["haupt-list"];
+    clearNode(hauptList);
+    var hCard = el("div", "haupt-card");
+    var hTop = el("div", "haupt-card-top");
+    hTop.appendChild(el("span", "haupt-title", haupt.titel || HAUPT_LABEL));
+    hTop.appendChild(el("span", "stage-price tabular", haupt.preis || ""));
+    hCard.appendChild(hTop);
+    var hMeta = el("div", "haupt-meta");
+    [["Ausgangssituation", haupt.ausgangssituation], ["Zielzustand", haupt.zielzustand],
+     ["Transformation", haupt.transformation], ["Methode", haupt.methode],
+     ["Umfang & Dauer", haupt.umfangUndDauer]].forEach(function (pair) {
+      if (!pair[1]) return;
+      var m = el("div");
+      m.appendChild(el("span", null, pair[0]));
+      m.appendChild(document.createTextNode(pair[1]));
+      hMeta.appendChild(m);
+    });
+    hCard.appendChild(hMeta);
+    if (haupt.warum) hCard.appendChild(el("p", "haupt-why", haupt.warum));
+    hauptList.appendChild(hCard);
+
+    var convList = els["conv-list"];
+    clearNode(convList);
+    (data.conversionPfad || []).forEach(function (t) {
+      var row = el("div", "conv-row");
+      var chips = el("div", "conv-chips");
+      chips.appendChild(el("span", "chip", t.von || ""));
+      chips.appendChild(el("span", "conv-arrow", "→"));
+      chips.appendChild(el("span", "chip is-accent", t.nach || ""));
+      row.appendChild(chips);
+      var bodyDiv = el("div", "conv-body");
+      [["Erreicht", t.erreicht], ["Nächstes Problem", t.naechstesProblem], ["Logik", t.logik]].forEach(function (pair) {
+        if (!pair[1]) return;
+        var pe = el("div", "idea-pe");
+        pe.appendChild(el("span", null, pair[0]));
+        pe.appendChild(el("p", null, pair[1]));
+        bodyDiv.appendChild(pe);
+      });
+      if (t.ueberleitung) bodyDiv.appendChild(el("p", "conv-quote", "„" + t.ueberleitung + "“"));
+      row.appendChild(bodyDiv);
+      convList.appendChild(row);
+    });
+
+    if (data.qualitaetscheck) {
+      els["qualitaets-panel"].hidden = false;
+      els["qualitaets-text"].textContent = data.qualitaetscheck;
+    } else {
+      els["qualitaets-panel"].hidden = true;
+    }
+  }
+
+  var PDF_ERROR_COPY = {
+    rejected_extension: "PDF-Format wird hier nicht unterstützt.",
+    extension_not_enabled: "PDF-Speichern ist in dieser Ansicht nicht aktiv.",
+    too_large: "Die Datei ist zu groß zum Speichern.",
+    declined: "",
+    rate_limited: "Bitte kurz warten und nochmal versuchen.",
+    bad_request: "Beim Erstellen der PDF ist etwas schiefgelaufen.",
+    unavailable: "Speichern ist in dieser Ansicht nicht möglich.",
+    not_granted: "Speichern wurde für diese Ansicht nicht erlaubt.",
+    capability_disabled: "Speichern ist in dieser Ansicht nicht nutzbar.",
+    capability_removed: "Diese Ansicht ist zu alt für diese Funktion."
+  };
+
+  function setPdfStatus(text, isError) {
+    els["pdf-status"].textContent = text || "";
+    els["pdf-status"].classList.toggle("is-error", !!isError);
+  }
+
+  els["pdf-btn"].addEventListener("click", function () { exportPdf(); });
+
+  async function exportPdf() {
+    if (!lastData) return;
+    var btn = els["pdf-btn"];
+    var original = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "PDF wird erstellt …";
+    setPdfStatus("");
+    try {
+      var JsPDF = window.jspdf && window.jspdf.jsPDF;
+      if (!JsPDF) throw { code: "bad_request", message: "jsPDF nicht geladen" };
+      var doc = new JsPDF({ unit: "pt", format: "a4" });
+      renderPdf(doc, lastData, lastAnalyse);
+      doc.save("funnelschmiede-produkttreppe.pdf");
+      setPdfStatus("Gespeichert.");
+    } catch (e) {
+      var code = e && e.code;
+      var msg = (code && PDF_ERROR_COPY[code] !== undefined) ? PDF_ERROR_COPY[code] : "PDF konnte nicht erstellt werden.";
+      if (msg) setPdfStatus(msg, true);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = original;
+    }
+  }
+
+  function renderPdf(doc, data, analyse) {
+    var PAGE_W = doc.internal.pageSize.getWidth();
+    var PAGE_H = doc.internal.pageSize.getHeight();
+    var MARGIN = 50;
+    var CONTENT_W = PAGE_W - MARGIN * 2;
+    var HEADER_Y = 40;
+    var FOOTER_LIMIT = PAGE_H - 60;
+    var INK = [28, 35, 43];
+    var INK_SOFT = [91, 100, 114];
+    var BRASS = [143, 79, 28];
+    var BRASS_TINT = [240, 223, 201];
+    var LINE = [221, 214, 199];
+    var y = 0;
+
+    function drawHeader() {
+      doc.setFont("times", "bold"); doc.setFontSize(9);
+      doc.setTextColor(INK[0], INK[1], INK[2]);
+      doc.text("FUNNELSCHMIEDE · DEINE PRODUKTTREPPE", MARGIN, HEADER_Y);
+      doc.setFont("helvetica", "normal"); doc.setFontSize(8);
+      doc.setTextColor(INK_SOFT[0], INK_SOFT[1], INK_SOFT[2]);
+      doc.text(new Date().toLocaleDateString("de-DE"), PAGE_W - MARGIN, HEADER_Y, { align: "right" });
+      doc.setDrawColor(LINE[0], LINE[1], LINE[2]);
+      doc.line(MARGIN, HEADER_Y + 8, PAGE_W - MARGIN, HEADER_Y + 8);
+      y = HEADER_Y + 40;
+    }
+    function newPage() { doc.addPage(); drawHeader(); }
+    function ensureSpace(needed) { if (y + needed > FOOTER_LIMIT) newPage(); }
+
+    // Die PDF-Standardschriften kennen nur den Westeuropa-Zeichensatz.
+    // Pfeile und Aehnliches wuerden sonst als Zeichensalat erscheinen.
+    function pdfText(text) {
+      return String(text == null ? "" : text)
+        .replace(/[\u2192\u21D2\u27A1]/g, "->")
+        .replace(/[\u2190\u21D0]/g, "<-")
+        .replace(/[\u2193\u21D3]/g, "v")
+        .replace(/[\u2191\u21D1]/g, "^")
+        .replace(/[\u2713\u2714]/g, "+")
+        .replace(/[\u2022\u25CF\u25AA]/g, "-")
+        .replace(/[\u2026]/g, "...")
+        .replace(/[\u00A0\u202F\u2009]/g, " ");
+    }
+
+    // Zeile fuer Zeile setzen, damit lange Absaetze sauber auf die naechste Seite laufen.
+    function paragraph(text, opts) {
+      opts = opts || {};
+      var size = opts.size || 10.5;
+      var color = opts.color || INK_SOFT;
+      var lh = opts.lineHeight || size * 1.35;
+
+      function apply() {
+        doc.setFont(opts.font || "helvetica", opts.style || "normal");
+        doc.setFontSize(size);
+        doc.setTextColor(color[0], color[1], color[2]);
+      }
+      apply();
+      var lines = doc.splitTextToSize(pdfText(text), opts.width || CONTENT_W);
+
+      lines.forEach(function (line) {
+        if (y + lh > FOOTER_LIMIT) { newPage(); apply(); }
+        doc.text(line, MARGIN, y);
+        y += lh;
+      });
+      y += (opts.gapAfter || 0);
+      return lines.length * lh;
+    }
+    function heading(text, size) {
+      doc.setFont("times", "bold"); doc.setFontSize(size);
+      doc.setTextColor(INK[0], INK[1], INK[2]);
+      var lines = doc.splitTextToSize(pdfText(text), CONTENT_W);
+      lines.forEach(function (line) {
+        if (y + size * 1.6 > FOOTER_LIMIT) {
+          newPage();
+          doc.setFont("times", "bold"); doc.setFontSize(size);
+          doc.setTextColor(INK[0], INK[1], INK[2]);
+        }
+        doc.text(line, MARGIN, y);
+        y += size * 1.6;
+      });
+    }
+    function eyebrow(text) {
+      ensureSpace(16);
+      doc.setFont("helvetica", "bold"); doc.setFontSize(8.5);
+      doc.setTextColor(BRASS[0], BRASS[1], BRASS[2]);
+      doc.text(text.toUpperCase(), MARGIN, y);
+      y += 16;
+    }
+
+    drawHeader();
+    heading("Deine Produkttreppe", 22);
+    y += 4;
+    paragraph(data.positioning, { size: 11, gapAfter: 18 });
+
+    eyebrow("Übersicht");
+    heading("Deine Stufen auf einen Blick", 15);
+    paragraph("Nur Stufen, die eine echte strategische Funktion haben.", { size: 9.5, gapAfter: 10 });
+
+    var colStufe = 108, colPreis = 92, colProdukt = 125;
+    var colNutzen = CONTENT_W - colStufe - colPreis - colProdukt;
+    var xStufe = MARGIN, xProdukt = xStufe + colStufe, xPreis = xProdukt + colProdukt, xNutzen = xPreis + colPreis;
+
+    doc.setFont("helvetica", "bold"); doc.setFontSize(8);
+    doc.setTextColor(INK_SOFT[0], INK_SOFT[1], INK_SOFT[2]);
+    ["STUFE", "PRODUKT", "PREIS", "ERGEBNIS"].forEach(function (h, i) {
+      doc.text(h, [xStufe, xProdukt, xPreis, xNutzen][i], y);
+    });
+    y += 6;
+    doc.setDrawColor(LINE[0], LINE[1], LINE[2]);
+    doc.line(MARGIN, y, PAGE_W - MARGIN, y);
+    y += 12;
+
+    buildOverviewRows(data).forEach(function (row) {
+      doc.setFont("helvetica", "bold"); doc.setFontSize(9);
+      var stufeLines = doc.splitTextToSize(pdfText(row.label), colStufe - 6);
+      doc.setFont("helvetica", "normal"); doc.setFontSize(9);
+      var produktLines = doc.splitTextToSize(pdfText(row.produkt), colProdukt - 8);
+      var nutzenLines = doc.splitTextToSize(pdfText(row.ergebnis), colNutzen - 6);
+      var lineCount = Math.max(stufeLines.length, produktLines.length, nutzenLines.length, 1);
+      var rowH = lineCount * 12 + 10;
+      ensureSpace(rowH);
+
+      doc.setFont("helvetica", "bold"); doc.setFontSize(9);
+      doc.setTextColor(INK[0], INK[1], INK[2]);
+      doc.text(stufeLines, xStufe, y);
+
+      doc.setFont("helvetica", "normal"); doc.setFontSize(9);
+      doc.setTextColor(INK_SOFT[0], INK_SOFT[1], INK_SOFT[2]);
+      doc.text(produktLines, xProdukt, y);
+
+      // Lange Preisangaben umbrechen, statt sie ueber die Spalte hinauslaufen zu lassen.
+      doc.setFontSize(8.5);
+      var preisLines = doc.splitTextToSize(pdfText(row.preis), colPreis - 16);
+      doc.setFillColor(BRASS_TINT[0], BRASS_TINT[1], BRASS_TINT[2]);
+      var priceW = preisLines.reduce(function (w, line) {
+        return Math.max(w, doc.getTextWidth(line));
+      }, 0) + 12;
+      doc.roundedRect(xPreis, y - 9, Math.min(priceW, colPreis - 4), 4 + preisLines.length * 11, 6, 6, "F");
+      doc.setTextColor(BRASS[0], BRASS[1], BRASS[2]);
+      doc.text(preisLines, xPreis + 6, y);
+
+      doc.setFont("helvetica", "normal"); doc.setFontSize(9);
+      doc.setTextColor(INK_SOFT[0], INK_SOFT[1], INK_SOFT[2]);
+      doc.text(nutzenLines, xNutzen, y);
+
+      y += rowH - 4;
+      doc.setDrawColor(LINE[0], LINE[1], LINE[2]);
+      doc.line(MARGIN, y, PAGE_W - MARGIN, y);
+      y += 14;
+    });
+
+    if (analyse) {
+      newPage();
+      eyebrow("Phase 2");
+      heading("Strategische Analyse", 18);
+      y += 4;
+      ANALYSE_FIELDS.forEach(function (f) {
+        if (!analyse[f.key]) return;
+        paragraph(f.label, { font: "helvetica", style: "bold", size: 10, color: INK, gapAfter: 2 });
+        paragraph(analyse[f.key], { size: 9.5, gapAfter: 10 });
+      });
+    }
+
+    newPage();
+    eyebrow("Im Detail");
+    heading("Jede Stufe im Einzelnen", 18);
+    y += 4;
+
+    (data.stages || []).forEach(function (st, i) {
+      var meta = STAGE_META[i];
+      if (!meta) return;
+      ensureSpace(30);
+      doc.setFont("times", "bold"); doc.setFontSize(13);
+      doc.setTextColor(INK[0], INK[1], INK[2]);
+      doc.text(meta.label, MARGIN, y);
+      if (st && st.istEnthalten) {
+        doc.setFont("helvetica", "normal"); doc.setFontSize(10);
+        doc.setTextColor(BRASS[0], BRASS[1], BRASS[2]);
+        doc.text(st.preisbereich || "", PAGE_W - MARGIN, y, { align: "right" });
+      }
+      y += 18;
+
+      if (!st || !st.istEnthalten) {
+        paragraph("Nicht enthalten" + (st && st.grundWennAusgelassen ? ": " + st.grundWennAusgelassen : "."),
+          { style: "italic", size: 9.5, gapAfter: 12 });
+        return;
+      }
+
+      (st.ideen || []).forEach(function (idea, j) {
+        paragraph((j + 1) + ". " + (idea.titel || ""), { font: "helvetica", style: "bold", size: 10, color: INK, gapAfter: 2 });
+        if (idea.versprechen) paragraph(idea.versprechen, { style: "italic", size: 9.5, color: INK, gapAfter: 2 });
+        var metaBits = [idea.zielgruppe ? ("Zielgruppe: " + idea.zielgruppe) : "", idea.format ? ("Format: " + idea.format) : "", idea.preis ? ("Preis: " + idea.preis) : ""].filter(Boolean).join("   ·   ");
+        if (metaBits) paragraph(metaBits, { size: 8.5, color: BRASS, gapAfter: 3 });
+        if (idea.problem) paragraph("Problem: " + idea.problem, { size: 9, gapAfter: 2, width: CONTENT_W - 14 });
+        if (idea.ergebnis) paragraph("Ergebnis: " + idea.ergebnis, { size: 9, gapAfter: 2, width: CONTENT_W - 14 });
+        if (idea.kaufgrund) paragraph("Kaufgrund: " + idea.kaufgrund, { size: 9, gapAfter: 6, width: CONTENT_W - 14 });
+      });
+      y += 4;
+      ensureSpace(1);
+      doc.setDrawColor(LINE[0], LINE[1], LINE[2]);
+      doc.line(MARGIN, y, PAGE_W - MARGIN, y);
+      y += 16;
+    });
+
+    var haupt = data.hauptprodukt || {};
+    newPage();
+    eyebrow("Hauptprodukt");
+    heading(haupt.titel || "Dein Hauptprodukt", 18);
+    if (haupt.preis) paragraph("Preis: " + haupt.preis, { size: 9.5, color: BRASS, gapAfter: 8 });
+    [["Ausgangssituation", haupt.ausgangssituation], ["Zielzustand", haupt.zielzustand],
+     ["Transformation", haupt.transformation], ["Methode", haupt.methode],
+     ["Umfang & Dauer", haupt.umfangUndDauer], ["Warum Hauptprodukt", haupt.warum]].forEach(function (pair) {
+      if (!pair[1]) return;
+      paragraph(pair[0] + ":", { font: "helvetica", style: "bold", size: 9.5, color: INK, gapAfter: 2 });
+      paragraph(pair[1], { size: 9.5, gapAfter: 8 });
+    });
+
+    newPage();
+    eyebrow("Conversion-Pfad");
+    heading("So führt eine Stufe zur nächsten", 18);
+    y += 4;
+    (data.conversionPfad || []).forEach(function (t) {
+      paragraph((t.von || "") + "  ->  " + (t.nach || ""), { font: "helvetica", style: "bold", size: 9.5, color: INK, gapAfter: 4 });
+      if (t.erreicht) paragraph("Erreicht: " + t.erreicht, { size: 9, gapAfter: 2 });
+      if (t.naechstesProblem) paragraph("Naechstes Problem: " + t.naechstesProblem, { size: 9, gapAfter: 2 });
+      if (t.logik) paragraph("Logik: " + t.logik, { size: 9, gapAfter: 2 });
+      if (t.ueberleitung) paragraph("„" + t.ueberleitung + "“", { style: "italic", size: 10, color: INK, gapAfter: 14 });
+    });
+
+    if (data.qualitaetscheck) {
+      eyebrow("Qualitätscheck");
+      heading("Kritische Einschätzung", 16);
+      paragraph(data.qualitaetscheck, { size: 10, color: INK, gapAfter: 10 });
+    }
+
+    var totalPages = doc.internal.getNumberOfPages();
+    for (var p = 1; p <= totalPages; p++) {
+      doc.setPage(p);
+      doc.setFont("helvetica", "normal"); doc.setFontSize(8);
+      doc.setTextColor(INK_SOFT[0], INK_SOFT[1], INK_SOFT[2]);
+      doc.text("FUNNELSCHMIEDE", MARGIN, PAGE_H - 30);
+      doc.text("SEITE " + p + " VON " + totalPages, PAGE_W - MARGIN, PAGE_H - 30, { align: "right" });
+    }
+  }
+
+  // Layout-Testmodus: localhost:8000/?demo=1 zeigt das zuletzt erzeugte Ergebnis
+  // erneut an, ohne die API aufzurufen. Spart Ausfuehrungen beim Feinschliff.
+  function showDemo() {
+    var raw = null;
+    try { raw = localStorage.getItem("fs-last-result"); } catch (e) {}
+    if (!raw) return false;
+    try {
+      var saved = JSON.parse(raw);
+      lastAnalyse = saved.analyse || null;
+      renderResult(saved.treppe);
+      showScreen("result");
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  if (/[?&]demo=1/.test(location.search) && showDemo()) {
+    // nichts weiter zu tun
+  } else {
+    showScreen("intro");
+  }
+})();
+</script>
+
+</body></html>
